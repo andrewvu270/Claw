@@ -34,8 +34,6 @@ export default function ClawMachine() {
     toyEls: [],
     targetToy: null,
     collectedNumber: 0,
-    turnUsed: false,
-    remainingTurns: 0,
     maxArmLength: 0,
     machineWidth: 0,
     machineHeight: 0,
@@ -267,8 +265,6 @@ export default function ClawMachine() {
 
   const activateHoriBtn = () => {
     const g = gameRef.current
-    if (g.remainingTurns <= 0) return
-    g.turnUsed = false
     activateBtn(horiBtnRef.current)
     const { vertRail, armJoint, arm } = g.objects
     ;[vertRail, armJoint, arm].forEach((c) => clearObjInterval(c))
@@ -296,11 +292,6 @@ export default function ClawMachine() {
     }
     setTimeout(() => {
       arm.el.classList.remove('open')
-      g.turnUsed = true
-      g.remainingTurns -= 1
-      if (window.parent) {
-        window.parent.postMessage({ type: 'TURN_COMPLETE' }, '*')
-      }
       activateHoriBtn()
       if (g.targetToy) {
         g.targetToy.el.classList.add('selected')
@@ -473,16 +464,7 @@ export default function ClawMachine() {
       })
     })
 
-    // listen for parent messages
-    const onMessage = (event) => {
-      if (event.data.type === 'TURNS_UPDATED') {
-        g.remainingTurns = event.data.turns
-      }
-    }
-    window.addEventListener('message', onMessage)
-
     return () => {
-      window.removeEventListener('message', onMessage)
       g.intervals.forEach((id) => clearInterval(id))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
