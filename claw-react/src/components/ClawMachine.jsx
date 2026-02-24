@@ -2,7 +2,7 @@ import { useEffect, useRef, useCallback, useState } from 'react'
 import { supabase } from '../supabaseClient'
 import './ClawMachine.css'
 
-const M = 2.3
+const M = 2.2
 const CORNER_BUFFER = 16
 const MACHINE_BUFFER = { x: 36, y: 16 }
 
@@ -386,7 +386,7 @@ export default function ClawMachine() {
     try {
       const { data, error } = await supabase
         .from('toys')
-        .select('name, width, height, sprite_width, sprite_height, sprite_top, sprite_left, mime_type, sprite_normal, sprite_grabbed, sprite_collected')
+        .select('name, width, height, sprite_width, sprite_height, sprite_top, sprite_left, mime_type, sprite_normal, sprite_grabbed, sprite_collected, group')
       if (error) throw error
       if (!data) return
       data.forEach((toy) => {
@@ -401,10 +401,17 @@ export default function ClawMachine() {
           sNormal: toy.sprite_normal,
           sGrabbed: toy.sprite_grabbed,
           sCollected: toy.sprite_collected,
+          group: toy.group,
         }
       })
-      const toyKeys = Object.keys(g.toys)
-      g.sortedToys = new Array(12).fill('').map(() => toyKeys[randomN(0, toyKeys.length - 1)])
+      const ogKeys = Object.keys(g.toys).filter((k) => g.toys[k].group === 'og')
+      const otherKeys = Object.keys(g.toys).filter((k) => g.toys[k].group !== 'og')
+      g.sortedToys = new Array(12).fill('').map(() => {
+        if (Math.random() < 0.7 && ogKeys.length) {
+          return ogKeys[randomN(0, ogKeys.length - 1)]
+        }
+        return otherKeys[randomN(0, otherKeys.length - 1)]
+      })
     } catch (err) {
       console.error('Error fetching toys:', err)
     }
