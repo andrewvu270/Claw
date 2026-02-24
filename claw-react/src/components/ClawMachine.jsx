@@ -156,9 +156,9 @@ export default function ClawMachine() {
     el.style.setProperty('--sh', `${size.sh}px`)
     el.style.setProperty('--st', `${size.st}px`)
     el.style.setProperty('--sl', `${size.sl}px`)
-    el.style.setProperty('--s-normal', `url(data:${size.mime};base64,${size.sNormal})`)
-    el.style.setProperty('--s-grabbed', `url(data:${size.mime};base64,${size.sGrabbed || size.sNormal})`)
-    el.style.setProperty('--s-collected', `url(data:${size.mime};base64,${size.sCollected || size.sNormal})`)
+    el.style.setProperty('--s-normal', `url(${size.sNormal})`)
+    el.style.setProperty('--s-grabbed', `url(${size.sGrabbed || size.sNormal})`)
+    el.style.setProperty('--s-collected', `url(${size.sCollected || size.sNormal})`)
 
     boxRef.current.append(el)
 
@@ -214,9 +214,9 @@ export default function ClawMachine() {
     collectedToyEl.style.setProperty('--sh', `${toyData.sh}px`)
     collectedToyEl.style.setProperty('--st', `${toyData.st}px`)
     collectedToyEl.style.setProperty('--sl', `${toyData.sl}px`)
-    collectedToyEl.style.setProperty('--s-normal', `url(data:${toyData.mime};base64,${toyData.sNormal})`)
-    collectedToyEl.style.setProperty('--s-grabbed', `url(data:${toyData.mime};base64,${toyData.sGrabbed || toyData.sNormal})`)
-    collectedToyEl.style.setProperty('--s-collected', `url(data:${toyData.mime};base64,${toyData.sCollected || toyData.sNormal})`)
+    collectedToyEl.style.setProperty('--s-normal', `url(${toyData.sNormal})`)
+    collectedToyEl.style.setProperty('--s-grabbed', `url(${toyData.sGrabbed || toyData.sNormal})`)
+    collectedToyEl.style.setProperty('--s-collected', `url(${toyData.sCollected || toyData.sNormal})`)
 
     collectionBoxRef.current.appendChild(wrapper)
     setTimeout(() => {

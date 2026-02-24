@@ -1,8 +1,10 @@
-import { supabase } from '../supabaseClient'
-
 export const CACHE_KEY = 'claw_toys_cache'
 export const DEFAULT_TTL = 604800000 // 7 days in milliseconds
 const M = 2.2
+
+const R2_TOYS_URL = import.meta.env.VITE_R2_PUBLIC_URL
+  ? `${import.meta.env.VITE_R2_PUBLIC_URL}/toys/toys.json`
+  : `${import.meta.env.VITE_SUPABASE_URL}` // fallback won't be used
 
 /**
  * Serialize a CacheEntry to a JSON string.
@@ -34,8 +36,9 @@ export function clearToyCache() {
 }
 
 /**
- * Transform raw Supabase rows into the toy data map keyed by name.
- * @param {Array} rows - Raw rows from the toys table
+ * Transform R2 toy rows into the toy data map keyed by name.
+ * sprite_normal/grabbed/collected are now URLs, not base64.
+ * @param {Array} rows - Rows from toys.json
  * @returns {object} - Toy data keyed by toy name
  */
 function transformToyRows(rows) {
@@ -59,14 +62,13 @@ function transformToyRows(rows) {
 }
 
 /**
- * Fetch toy data from Supabase.
+ * Fetch toy data from R2.
  * @returns {Promise<object|null>}
  */
-async function fetchFromSupabase() {
-  const { data, error } = await supabase
-    .from('toys')
-    .select('name, width, height, sprite_width, sprite_height, sprite_top, sprite_left, mime_type, sprite_normal, sprite_grabbed, sprite_collected, group')
-  if (error) throw error
+async function fetchFromR2() {
+  const res = await fetch(R2_TOYS_URL)
+  if (!res.ok) throw new Error(`R2 fetch failed: ${res.status}`)
+  const data = await res.json()
   if (!data) return null
   return transformToyRows(data)
 }
@@ -90,12 +92,12 @@ export async function getCachedToys({ ttl = DEFAULT_TTL } = {}) {
       }
     }
   } catch (e) {
-    // localStorage read error or malformed JSON — fall through to Supabase
+    // localStorage read error or malformed JSON — fall through to R2
   }
 
-  // 2. Cache miss or expired — fetch from Supabase
+  // 2. Cache miss or expired — fetch from R2
   try {
-    const toys = await fetchFromSupabase()
+    const toys = await fetchFromR2()
     if (!toys) return null
 
     // 3. Try to store in localStorage
@@ -108,7 +110,7 @@ export async function getCachedToys({ ttl = DEFAULT_TTL } = {}) {
 
     return toys
   } catch (fetchErr) {
-    console.error('toyCache: Supabase fetch failed', fetchErr)
+    console.error('toyCache: R2 fetch failed', fetchErr)
     return null
   }
 }
