@@ -1,8 +1,8 @@
 import { useEffect, useRef, useCallback, useState } from 'react'
 import { supabase } from '../supabaseClient'
+import { getCachedToys } from '../utils/toyCache'
 import './ClawMachine.css'
 
-const M = 2.2
 const CORNER_BUFFER = 16
 const MACHINE_BUFFER = { x: 36, y: 16 }
 
@@ -385,26 +385,9 @@ export default function ClawMachine() {
   const fetchToys = async () => {
     const g = gameRef.current
     try {
-      const { data, error } = await supabase
-        .from('toys')
-        .select('name, width, height, sprite_width, sprite_height, sprite_top, sprite_left, mime_type, sprite_normal, sprite_grabbed, sprite_collected, group')
-      if (error) throw error
-      if (!data) return
-      data.forEach((toy) => {
-        g.toys[toy.name] = {
-          w: toy.width * M,
-          h: toy.height * M,
-          sw: toy.sprite_width * M,
-          sh: toy.sprite_height * M,
-          st: toy.sprite_top * M,
-          sl: toy.sprite_left * M,
-          mime: toy.mime_type || 'image/png',
-          sNormal: toy.sprite_normal,
-          sGrabbed: toy.sprite_grabbed,
-          sCollected: toy.sprite_collected,
-          group: toy.group,
-        }
-      })
+      const toys = await getCachedToys()
+      if (!toys) return
+      g.toys = toys
       const ogKeys = Object.keys(g.toys).filter((k) => g.toys[k].group === 'og')
       const otherKeys = Object.keys(g.toys).filter((k) => g.toys[k].group !== 'og')
       g.sortedToys = new Array(12).fill('').map(() => {
