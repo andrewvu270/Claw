@@ -9,13 +9,13 @@ body {
   margin: 0;
   font-family: sans-serif;
   background-color: transparent;
-  --brown: #1a0a2e;
-  --blue: #a855f7;
-  --dark-blue: #2d1b4e;
-  --machine-color: #3b1f6e;
-  --punk-pink: #e040fb;
-  --punk-yellow: #f0abfc;
-  --punk-cyan: #a855f7;
+  --brown: #0a1628;
+  --blue: #22d3ee;
+  --dark-blue: #0f2847;
+  --machine-color: #0c3a5e;
+  --punk-pink: #06b6d4;
+  --punk-yellow: #67e8f9;
+  --punk-cyan: #22d3ee;
   --machine-width: 160px;
   --m: 2.3;
 }
@@ -49,8 +49,11 @@ body {
   flex-direction: column;
   border: 4px solid var(--brown);
   overflow: hidden;
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5), 0 0 40px rgba(224, 64, 251, 0.3);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.4), 0 0 40px rgba(16, 185, 129, 0.25);
   position: relative;
+  background: linear-gradient(135deg, #0a1628, #0c3a5e, #064e3b, #0f2847);
+  background-size: 300% 300%;
+  animation: machine-glow 6s ease infinite;
 }
 
 .claw-machine::before {
@@ -60,9 +63,9 @@ body {
   left: 50%;
   transform: translateX(-50%);
   font-weight: bold;
-  font-size: 19.2px;
-  color: var(--punk-yellow);
-  text-shadow: 2px 2px 0 var(--punk-pink), -2px -2px 0 var(--punk-cyan);
+  font-size: 28.8px;
+  color: #ff1493;
+  text-shadow: 0 0 10px #ff1493, 0 0 20px #ff69b4, 0 0 40px #ff1493, 2px 2px 0 #ff69b4;
   z-index: 10;
 }
 
@@ -117,7 +120,7 @@ body {
 
 .box {
   position: relative;
-  background: linear-gradient(135deg, #2d1b4e 0%, #1a0a2e 50%, #3b1f6e 100%);
+  background: linear-gradient(135deg, #1a3a4a 0%, #1e4d5e 50%, #1a5c6a 100%);
   background-size: 200% 200%;
   animation: gradient-shift 4s ease infinite;
   --w: var(--machine-width);
@@ -130,8 +133,16 @@ body {
   100% { background-position: 0% 50%; }
 }
 
+@keyframes machine-glow {
+  0% { background-position: 0% 0%; }
+  25% { background-position: 100% 0%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
 .box::before {
-  background-color: #c4b5fd;
+  background-color: #c4e8d8;
   top: calc(70px * var(--m));
   width: 100%;
   height: calc(var(--m) * 8px);
@@ -166,20 +177,27 @@ body {
   content: '';
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
   background: repeating-linear-gradient(
     45deg,
-    rgba(168, 85, 247, 0.15),
-    rgba(168, 85, 247, 0.15) 10px,
-    rgba(224, 64, 251, 0.1) 10px,
-    rgba(224, 64, 251, 0.1) 20px
+    rgba(34, 211, 238, 0.3),
+    rgba(34, 211, 238, 0.3) 8px,
+    rgba(16, 185, 129, 0.15) 8px,
+    rgba(16, 185, 129, 0.15) 16px
   );
+  background-size: 16px 16px;
+  animation: stripe-move 1s linear infinite;
+}
+
+@keyframes stripe-move {
+  from { background-position: 0 0; }
+  to { background-position: 16px 16px; }
 }
 
 .machine-bottom {
   bottom: 0;
-  background-color: #e9d5ff;
+  background-color: #d1fae5;
 }
 
 .drop-zone {
@@ -188,11 +206,11 @@ body {
   left: 0;
   width: calc(var(--m) * 44px);
   height: calc(var(--m) * 24px);
-  background-color: #2d1b4e;
-  border-top: 3px solid #a855f7;
-  border-right: 3px solid #a855f7;
+  background-color: #0f2847;
+  border-top: 3px solid #22d3ee;
+  border-right: 3px solid #22d3ee;
   border-radius: 0 8px 0 0;
-  box-shadow: inset 0 0 12px rgba(168, 85, 247, 0.4);
+  box-shadow: inset 0 0 12px rgba(16, 185, 129, 0.4);
 }
 
 .collection-point {
@@ -214,7 +232,7 @@ body {
 .rail.hori {
   --h: 5px;
   width: 100%;
-  background-color: #c4b5fd;
+  background-color: #c4e8d8;
   border-width: 2px 0;
 }
 
@@ -222,7 +240,7 @@ body {
   position: absolute;
   --h: 70px;
   --w: 5px;
-  background-color: #c4b5fd;
+  background-color: #c4e8d8;
   border-width: 0 2px;
 }
 
@@ -239,7 +257,7 @@ body {
 .arm-joint::after {
   position: absolute;
   border: solid var(--blue) 2px;
-  background-color: #c4b5fd;
+  background-color: #c4e8d8;
   --w: 10px;
   --h: 10px;
   top: calc(var(--m) * var(--h) * -0.25);
@@ -325,7 +343,7 @@ body {
   position: absolute;
   --w: 7px;
   --h: 28px;
-  background-color: #e9d5ff;
+  background-color: #d1fae5;
   box-shadow: 0 0 0 2px var(--blue);
   transition: 0.3s;
   margin-top: calc(var(--m) * -1px);
