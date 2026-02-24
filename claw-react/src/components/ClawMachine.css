@@ -573,7 +573,7 @@ a:hover {
   position: absolute;
   z-index: 6;
   left: 38%;
-  bottom: calc(var(--m) * 18px);
+  bottom: calc(var(--m) * 14px);
   transform: translateX(-50%) rotate(55deg);
   font-size: 27.5px;
   background: linear-gradient(90deg, #39ff14, #22d3ee, #ff1493, #39ff14);
