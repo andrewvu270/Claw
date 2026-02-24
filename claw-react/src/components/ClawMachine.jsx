@@ -486,7 +486,9 @@ export default function ClawMachine() {
             <div className="rail hori pix"></div>
             <div className="rail vert pix" ref={vertRailRef}></div>
           </div>
-          <div className="machine-bottom pix" ref={machineBottomRef}></div>
+          <div className="machine-bottom pix" ref={machineBottomRef}>
+            <div className="drop-zone"></div>
+          </div>
         </div>
         <div className="control pix">
           <div className="cover left"></div>

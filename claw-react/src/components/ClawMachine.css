@@ -9,13 +9,13 @@ body {
   margin: 0;
   font-family: sans-serif;
   background-color: transparent;
-  --brown: #09053b;
-  --blue: #33a5da;
-  --dark-blue: #3a94b7;
-  --machine-color: #32c2db;
-  --punk-pink: #ff1493;
-  --punk-yellow: #ffff00;
-  --punk-cyan: #00ffff;
+  --brown: #1a0a2e;
+  --blue: #a855f7;
+  --dark-blue: #2d1b4e;
+  --machine-color: #3b1f6e;
+  --punk-pink: #e040fb;
+  --punk-yellow: #f0abfc;
+  --punk-cyan: #a855f7;
   --machine-width: 160px;
   --m: 2.3;
 }
@@ -49,7 +49,7 @@ body {
   flex-direction: column;
   border: 4px solid var(--brown);
   overflow: hidden;
-  box-shadow: 0 0 20px rgba(255, 0, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5), 0 0 40px rgba(224, 64, 251, 0.3);
   position: relative;
 }
 
@@ -117,7 +117,7 @@ body {
 
 .box {
   position: relative;
-  background: linear-gradient(135deg, #ff00ff 0%, #00ffff 50%, #ffff00 100%);
+  background: linear-gradient(135deg, #2d1b4e 0%, #1a0a2e 50%, #3b1f6e 100%);
   background-size: 200% 200%;
   animation: gradient-shift 4s ease infinite;
   --w: var(--machine-width);
@@ -131,7 +131,7 @@ body {
 }
 
 .box::before {
-  background-color: var(--brown);
+  background-color: #c4b5fd;
   top: calc(70px * var(--m));
   width: 100%;
   height: calc(var(--m) * 8px);
@@ -170,16 +170,29 @@ body {
   height: 100%;
   background: repeating-linear-gradient(
     45deg,
-    rgba(0, 0, 0, 0.6),
-    rgba(0, 0, 0, 0.6) 10px,
-    rgba(0, 0, 0, 0.4) 10px,
-    rgba(0, 0, 0, 0.4) 20px
+    rgba(168, 85, 247, 0.15),
+    rgba(168, 85, 247, 0.15) 10px,
+    rgba(224, 64, 251, 0.1) 10px,
+    rgba(224, 64, 251, 0.1) 20px
   );
 }
 
 .machine-bottom {
   bottom: 0;
-  background-color: #def7f6;
+  background-color: #e9d5ff;
+}
+
+.drop-zone {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: calc(var(--m) * 44px);
+  height: calc(var(--m) * 24px);
+  background-color: #2d1b4e;
+  border-top: 3px solid #a855f7;
+  border-right: 3px solid #a855f7;
+  border-radius: 0 8px 0 0;
+  box-shadow: inset 0 0 12px rgba(168, 85, 247, 0.4);
 }
 
 .collection-point {
@@ -201,7 +214,7 @@ body {
 .rail.hori {
   --h: 5px;
   width: 100%;
-  background-color: #fff;
+  background-color: #c4b5fd;
   border-width: 2px 0;
 }
 
@@ -209,7 +222,7 @@ body {
   position: absolute;
   --h: 70px;
   --w: 5px;
-  background-color: #fff;
+  background-color: #c4b5fd;
   border-width: 0 2px;
 }
 
@@ -226,7 +239,7 @@ body {
 .arm-joint::after {
   position: absolute;
   border: solid var(--blue) 2px;
-  background-color: #fff;
+  background-color: #c4b5fd;
   --w: 10px;
   --h: 10px;
   top: calc(var(--m) * var(--h) * -0.25);
@@ -312,7 +325,7 @@ body {
   position: absolute;
   --w: 7px;
   --h: 28px;
-  background-color: #fff;
+  background-color: #e9d5ff;
   box-shadow: 0 0 0 2px var(--blue);
   transition: 0.3s;
   margin-top: calc(var(--m) * -1px);
