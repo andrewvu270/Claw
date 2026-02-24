@@ -553,16 +553,11 @@ a:hover {
   bottom: calc(var(--m) * 28px);
   transform: translateX(-50%) rotate(-12deg);
   font-family: 'Courier New', monospace;
-  font-size: 15.4px;
+  font-size: 19px;
   font-weight: bold;
-  background: linear-gradient(90deg, #39ff14, #22d3ee, #ff1493, #39ff14);
-  background-size: 300% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: loot-gradient 3s linear infinite;
+  color: #39ff14;
+  text-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
   letter-spacing: 3px;
-  filter: drop-shadow(0 0 6px rgba(57, 255, 20, 0.5));
 }
 
 @keyframes loot-gradient {
@@ -572,4 +567,19 @@ a:hover {
 
 .bandaid.bandaid-x {
   transform: rotate(55deg);
+}
+
+.loot-arrow {
+  position: absolute;
+  z-index: 6;
+  left: 38%;
+  bottom: calc(var(--m) * 18px);
+  transform: translateX(-50%) rotate(55deg);
+  font-size: 27.5px;
+  background: linear-gradient(90deg, #39ff14, #22d3ee, #ff1493, #39ff14);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: loot-gradient 3s linear infinite;
 }
