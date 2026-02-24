@@ -411,6 +411,8 @@ export default function ClawMachine() {
 
   useEffect(() => {
     const g = gameRef.current
+    if (g.initialized) return
+    g.initialized = true
 
     // measure DOM
     const machineRect = machineRef.current.getBoundingClientRect()
@@ -477,6 +479,9 @@ export default function ClawMachine() {
       <div className="collection-box pix" ref={collectionBoxRef}></div>
       <div className="claw-machine" ref={machineRef}>
         <div className="box pix" ref={boxRef}>
+          <div className="smiley">{'\u{1F608}'}</div>
+          <div className="bandaid"></div>
+          <div className="bandaid bandaid-x"></div>
           <div className="machine-top pix" ref={machineTopRef}>
             <div className="arm-joint pix" ref={armJointRef}>
               <div className="arm pix" ref={armRef}>
@@ -517,6 +522,7 @@ export default function ClawMachine() {
           <div className="cover top">
             <div className="collection-arrow pix" ref={collectionArrowRef}></div>
           </div>
+          <div className="loot-tag">"LoOT"</div>
           <div className="collection-point pix"></div>
         </div>
       </div>

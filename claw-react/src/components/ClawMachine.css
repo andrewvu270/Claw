@@ -491,3 +491,85 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+.bandaid {
+  position: absolute;
+  z-index: 6;
+  right: calc(var(--m) * 38px);
+  top: calc(var(--m) * 46px);
+  width: 70px;
+  height: 26px;
+  background: #f5d6b8;
+  border: 2px solid #d4a574;
+  border-radius: 14px;
+  transform: rotate(-25deg);
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.bandaid::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 18px;
+  background: #e8c4a0;
+  border-radius: 3px;
+}
+
+.bandaid::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    #d4a574,
+    #d4a574 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  opacity: 0.6;
+}
+
+.smiley {
+  position: absolute;
+  right: calc(var(--m) * 14px);
+  top: calc(var(--m) * 48px);
+  font-size: 26px;
+  z-index: 6;
+  transform: rotate(-15deg);
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+}
+
+.loot-tag {
+  position: absolute;
+  z-index: 6;
+  left: 40%;
+  bottom: calc(var(--m) * 28px);
+  transform: translateX(-50%) rotate(-12deg);
+  font-family: 'Courier New', monospace;
+  font-size: 15.4px;
+  font-weight: bold;
+  background: linear-gradient(90deg, #39ff14, #22d3ee, #ff1493, #39ff14);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: loot-gradient 3s linear infinite;
+  letter-spacing: 3px;
+  filter: drop-shadow(0 0 6px rgba(57, 255, 20, 0.5));
+}
+
+@keyframes loot-gradient {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+.bandaid.bandaid-x {
+  transform: rotate(55deg);
+}
