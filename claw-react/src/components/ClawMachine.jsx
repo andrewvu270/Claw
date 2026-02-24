@@ -1,7 +1,8 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
+import { supabase } from '../supabaseClient'
 import './ClawMachine.css'
 
-const M = 2.15
+const M = 2.3
 const CORNER_BUFFER = 16
 const MACHINE_BUFFER = { x: 36, y: 16 }
 
@@ -26,6 +27,7 @@ export default function ClawMachine() {
   const vertBtnRef = useRef(null)
   const collectionBoxRef = useRef(null)
   const collectionArrowRef = useRef(null)
+  const [loading, setLoading] = useState(true)
 
   // mutable game state stored in refs so we don't re-render on every frame
   const gameRef = useRef({
@@ -146,7 +148,7 @@ export default function ClawMachine() {
     const el = document.createElement('div')
     el.className = `toy pix ${toyType}`
 
-    const x = CORNER_BUFFER + calcX(index, 4) * ((g.machineWidth - CORNER_BUFFER * 3) / 4) + size.w / 2 + randomN(-6, 6)
+    const x = 4 + calcX(index, 4) * ((g.machineWidth - CORNER_BUFFER * 2) / 4) + size.w / 2 + randomN(-3, 3)
     const y = g.machineBottomTop - g.machineTop + CORNER_BUFFER + calcY(index, 4) * ((g.machineBottomHeight - CORNER_BUFFER * 2) / 3) - size.h / 2 + randomN(-2, 2)
 
     el.style.setProperty('--sw', `${size.sw}px`)
@@ -189,10 +191,12 @@ export default function ClawMachine() {
     toy.el.classList.add('display')
     g.collectedNumber++
 
-    fetch('http://localhost:8000/api/claw/collect?toy_id=' + toy.toyType, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-    })
+    supabase
+      .from('user_toys')
+      .upsert(
+        { user_id: 'anonymous', toy_id: toy.toyType, count: 1 },
+        { onConflict: 'user_id,toy_id' }
+      )
       .then(() => {
         if (window.parent) {
           window.parent.postMessage({ type: 'TOY_COLLECTED', toyId: toy.toyType }, '*')
@@ -380,13 +384,12 @@ export default function ClawMachine() {
   const fetchToys = async () => {
     const g = gameRef.current
     try {
-      const res = await fetch('http://localhost:8000/api/claw/play', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      })
-      const result = await res.json()
-      if (!result.toys) return
-      result.toys.forEach((toy) => {
+      const { data, error } = await supabase
+        .from('toys')
+        .select('name, width, height, sprite_width, sprite_height, sprite_top, sprite_left, mime_type, sprite_normal, sprite_grabbed, sprite_collected')
+      if (error) throw error
+      if (!data) return
+      data.forEach((toy) => {
         g.toys[toy.name] = {
           w: toy.width * M,
           h: toy.height * M,
@@ -464,6 +467,7 @@ export default function ClawMachine() {
         if (i === 8) return
         createToy(i)
       })
+      setLoading(false)
     })
 
     return () => {
@@ -493,6 +497,12 @@ export default function ClawMachine() {
           </div>
           <div className="machine-bottom pix" ref={machineBottomRef}>
             <div className="drop-zone"></div>
+            {loading && (
+              <div className="loading-bubble">
+                <span className="loading-dots"></span>
+                <span>Loading toys</span>
+              </div>
+            )}
           </div>
         </div>
         <div className="control pix">
