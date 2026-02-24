@@ -583,3 +583,37 @@ a:hover {
   background-clip: text;
   animation: loot-gradient 3s linear infinite;
 }
+
+.loading-bubble {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(10, 22, 40, 0.85);
+  border: 2px solid #22d3ee;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #67e8f9;
+  text-shadow: 0 0 6px rgba(34, 211, 238, 0.6);
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.3);
+  white-space: nowrap;
+  image-rendering: pixelated;
+}
+
+.loading-dots::before {
+  content: '■ ■ ■';
+  font-size: 10px;
+  animation: dot-blink 1.2s steps(3) infinite;
+}
+
+@keyframes dot-blink {
+  0% { opacity: 0.2; }
+  50% { opacity: 1; }
+  100% { opacity: 0.2; }
+}
