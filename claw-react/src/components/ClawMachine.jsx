@@ -28,6 +28,7 @@ export default function ClawMachine() {
   const collectionBoxRef = useRef(null)
   const collectionArrowRef = useRef(null)
   const [loading, setLoading] = useState(true)
+  const keyActiveRef = useRef({ ArrowRight: false, ArrowUp: false })
 
   // mutable game state stored in refs so we don't re-render on every frame
   const gameRef = useRef({
@@ -483,6 +484,46 @@ export default function ClawMachine() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // ---- Keyboard controls ----
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') {
+        if (keyActiveRef.current.ArrowRight) return // prevent key-repeat
+        if (horiBtnRef.current?.dataset.locked === 'true') return
+        keyActiveRef.current.ArrowRight = true
+        onHoriBtnDown()
+      } else if (e.key === 'ArrowUp') {
+        if (keyActiveRef.current.ArrowUp) return
+        if (vertBtnRef.current?.dataset.locked === 'true') return
+        keyActiveRef.current.ArrowUp = true
+        onVertBtnDown()
+      }
+    }
+
+    const handleKeyUp = (e) => {
+      if (e.key === 'ArrowRight') {
+        if (!keyActiveRef.current.ArrowRight) return
+        keyActiveRef.current.ArrowRight = false
+        if (horiBtnRef.current?.dataset.locked === 'true') return
+        onHoriBtnUp()
+      } else if (e.key === 'ArrowUp') {
+        if (!keyActiveRef.current.ArrowUp) return
+        keyActiveRef.current.ArrowUp = false
+        if (vertBtnRef.current?.dataset.locked === 'true') return
+        onVertBtnUp()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   // ---- Render ----
 
   return (
@@ -519,18 +560,20 @@ export default function ClawMachine() {
             ref={horiBtnRef}
             data-locked="true"
             onMouseDown={onHoriBtnDown}
-            onTouchStart={onHoriBtnDown}
+            onTouchStart={(e) => { e.preventDefault(); onHoriBtnDown(); }}
             onMouseUp={onHoriBtnUp}
             onTouchEnd={onHoriBtnUp}
+            onContextMenu={(e) => e.preventDefault()}
           ></button>
           <button
             className="vert-btn pix"
             ref={vertBtnRef}
             data-locked="true"
             onMouseDown={onVertBtnDown}
-            onTouchStart={onVertBtnDown}
+            onTouchStart={(e) => { e.preventDefault(); onVertBtnDown(); }}
             onMouseUp={onVertBtnUp}
             onTouchEnd={onVertBtnUp}
+            onContextMenu={(e) => e.preventDefault()}
           ></button>
           <div className="cover right">
             <div className="instruction pix"></div>
