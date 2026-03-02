@@ -127,7 +127,7 @@ export default function ClawMachine() {
           clearObjInterval(obj)
           if (next) next()
         }
-      }, moveTime || 100)
+      }, moveTime || 35)
       obj.interval = id
       gameRef.current.intervals.add(id)
     }
@@ -306,10 +306,18 @@ export default function ClawMachine() {
     }, 700)
   }
 
+  const DROP_CHANCE = 0.5 // 100% drop chance for testing
+
   const grabToy = () => {
     const g = gameRef.current
     const { vertRail, armJoint, arm } = g.objects
     if (g.targetToy) {
+      if (Math.random() < DROP_CHANCE) {
+        // drop chance — claw grabs but immediately loses it
+        arm.el.classList.add('missed')
+        g.targetToy = null
+        return
+      }
       ;[vertRail, armJoint, arm].forEach((obj) => (obj.moveWith[0] = g.targetToy))
       setRotateAngle(g.targetToy)
       g.targetToy.el.classList.add('grabbed')
@@ -391,7 +399,7 @@ export default function ClawMachine() {
       const ogKeys = Object.keys(g.toys).filter((k) => g.toys[k].group === 'og')
       const otherKeys = Object.keys(g.toys).filter((k) => g.toys[k].group !== 'og')
       g.sortedToys = new Array(12).fill('').map(() => {
-        if (Math.random() < 0.7 && ogKeys.length) {
+        if (Math.random() < 0.3 && ogKeys.length) {
           return ogKeys[randomN(0, ogKeys.length - 1)]
         }
         return otherKeys[randomN(0, otherKeys.length - 1)]
